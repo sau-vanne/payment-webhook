@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Razorpay Payment</title>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+
+  <h1>Pay ₹99</h1>
+  <button id="pay-button">Pay Now</button>
+
+  <script>
+    document.getElementById('pay-button').onclick = async function () {
+      const response = await fetch('http://localhost:3000/create-order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const order = await response.json();
+
+      var options = {
+        "key": "rzp_live_GrJ0il0kPfziS0", // Use Razorpay key_id here
+        "amount": order.amount, // Amount is in currency subunits. Default is paise
+        "currency": order.currency,
+        "name": "Test Payment",
+        "description": "Pay ₹99",
+        "order_id": order.id,
+        "handler": function (response){
+          alert('Payment successful! Payment ID: ' + response.razorpay_payment_id);
+          // Here after successful payment we will call WhatsApp API (coming soon step)
+        },
+        "prefill": {
+          "name": "Test User",
+          "email": "test@example.com",
+          "contact": "9999999999"
+        },
+        "theme": {
+          "color": "#3399cc"
+        }
+      };
+
+      var rzp = new Razorpay(options);
+      rzp.open();
+    }
+  </script>
+
+</body>
+</html>
