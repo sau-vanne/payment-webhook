@@ -12,11 +12,6 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
-// Homepage route (NEWLY ADDED)
-app.get('/', (req, res) => {
-  res.send('Hello! Your server is working. Click Pay Now button to start payment.');
-});
-
 // API to create order
 app.post('/create-order', async (req, res) => {
   const options = {
